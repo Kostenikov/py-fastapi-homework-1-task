@@ -33,7 +33,7 @@ async def movies_list(
 ):
     total_items = await db.scalar(select(func.count(MovieModel.id)))
     total_pages = math.ceil(total_items / per_page)
-    if page > total_pages:
+    if total_items == 0 or page > total_pages:
         raise HTTPException(status_code=404, detail="No movies found.")
     prev_page = (
         str(request.url.replace_query_params(page=(page - 1), per_page=per_page))
